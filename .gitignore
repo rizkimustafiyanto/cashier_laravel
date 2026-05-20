@@ -16,6 +16,7 @@
 /.phpunit.cache
 /.env
 /.env.*
+!/.env.example
 /.auth.json
 Homestead.json
 Homestead.yaml

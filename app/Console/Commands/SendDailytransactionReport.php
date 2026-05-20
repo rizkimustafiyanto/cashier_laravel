@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
+use App\Mail\DailyTransactionReportMail;
 use App\Services\Report\DailyTransactionReportService;
 use App\Services\Telegram\TelegramNotificationService;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Mail;
 use Throwable;
 
 class SendDailyTransactionReport extends Command
@@ -39,18 +41,18 @@ class SendDailyTransactionReport extends Command
             $filePath = $reportService
                 ->generateReport($date);
 
+            Mail::to(config('report.email_recipient'))
+                ->send(new DailyTransactionReportMail($filePath, $date));
+
             $telegramService->sendDocument(
                 message: sprintf(
                     'Daily transaction report %s',
                     $date->format('Y-m-d'),
                 ),
-
                 filePath: $filePath,
             );
 
-            $this->info(
-                'Daily report sent successfully.',
-            );
+            $this->info('Daily report sent successfully.');
 
             return self::SUCCESS;
 

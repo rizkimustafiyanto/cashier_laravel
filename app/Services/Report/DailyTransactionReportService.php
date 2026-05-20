@@ -51,7 +51,7 @@ class DailyTransactionReportService
             'Subtotal',
             'Discount Total',
             'Grand Total',
-            'Created At',
+            'Paid At',
         ];
     }
 
@@ -59,8 +59,12 @@ class DailyTransactionReportService
     {
         return Transactions::query()
             ->with('cashier')
-            ->whereDate('created_at', $date)
-            ->orderBy('created_at')
+            ->whereNotNull('paid_at')
+            ->whereBetween('paid_at', [
+                $date->copy()->startOfDay(),
+                $date->copy()->endOfDay(),
+            ])
+            ->orderBy('paid_at')
             ->get()
             ->map(fn (Transactions $transaction): array => [
                 $transaction->invoice_number,
@@ -70,7 +74,7 @@ class DailyTransactionReportService
                 $transaction->subtotal,
                 $transaction->discount_total,
                 $transaction->grand_total,
-                $transaction->created_at?->format('d-m-Y H:i:s'),
+                $transaction->paid_at?->format('d-m-Y H:i:s'),
             ]);
     }
 }
