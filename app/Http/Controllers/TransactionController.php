@@ -9,6 +9,7 @@ use App\Actions\Transaction\DownloadInvoiceAction;
 use App\Models\Transactions;
 use App\DTOs\CreateTransactionData;
 use App\DTOs\TransactionItemData;
+use App\Enums\TransactionStatus;
 use App\Http\Requests\Transaction\StoreTransactionRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Collection;
@@ -82,6 +83,7 @@ class TransactionController extends Controller
 
         $transaction->update([
             'paid_at' => now(),
+            'status' => TransactionStatus::Paid->value,
         ]);
 
         return redirect()->back()->with('success', 'Transaction marked as paid.');

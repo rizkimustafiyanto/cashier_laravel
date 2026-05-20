@@ -352,4 +352,24 @@ class CreateTransaction extends Component
     {
         return view('livewire.transactions.create-transactions');
     }
+
+    public function getIsReadyProperty(): bool
+    {
+        $patientFieldsFilled =
+            filled($this->patientName) &&
+            filled($this->patientEmail) &&
+            filled($this->patientPhone) &&
+            filled($this->patientGender) &&
+            filled($this->patientDob);
+
+        $itemsValid = collect($this->items)
+            ->every(fn ($item) => filled(
+                data_get($item, 'procedure_id')
+            ));
+
+        return
+            $patientFieldsFilled &&
+            $itemsValid &&
+            count($this->items) > 0;
+    }
 }

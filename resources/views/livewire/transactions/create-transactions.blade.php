@@ -46,7 +46,20 @@
                             <h2 class="text-lg font-semibold text-zinc-900 dark:text-white">Patient Information</h2>
                             <p class="text-sm text-zinc-500 dark:text-zinc-400">Capture core demographic details before billing.</p>
                         </div>
-                        <span class="rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-600">Required fields ready</span>
+                        <span
+                            class="
+                                rounded-full px-3 py-1 text-xs font-semibold
+                                {{ $this->isReady
+                                    ? 'bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400'
+                                    : 'bg-amber-50 text-amber-700 dark:bg-amber-500/10 dark:text-amber-400'
+                                }}
+                            "
+                        >
+                            {{ $this->isReady
+                                ? 'Ready to submit'
+                                : 'Required fields incomplete'
+                            }}
+                        </span>
                     </div>
 
                     <div class="mt-6 grid gap-5 md:grid-cols-2">
@@ -319,6 +332,7 @@
                             wire:loading.attr="disabled"
                             wire:target="save"
                             class="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-linear-to-r from-blue-600 to-cyan-500 px-4 py-3.5 text-sm font-semibold text-white shadow-lg shadow-blue-500/20 transition-all duration-200 hover:-translate-y-px hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-60"
+                            @disabled(!$this->isReady)
                         >
                             <span wire:loading.remove wire:target="save">{{ $transaction ? __('Update Transaction') : __('Save Transaction') }}</span>
                             <span wire:loading wire:target="save" class="inline-flex items-center gap-2">

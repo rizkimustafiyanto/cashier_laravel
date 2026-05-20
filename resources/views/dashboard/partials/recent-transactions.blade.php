@@ -28,7 +28,7 @@
     {{-- Table --}}
     <div class="overflow-x-auto">
 
-        <table class="min-w-full divide-y divide-zinc-200 text-sm dark:divide-zinc-700">
+        <table class="min-w-full table-auto divide-y divide-zinc-200 text-sm dark:divide-zinc-700">
 
             {{-- Table Head --}}
             <thead class="bg-zinc-50 dark:bg-zinc-800/50">
@@ -44,13 +44,19 @@
                     <th
                         class="px-6 py-4 text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400"
                     >
-                        Patient
+                        Patient Info
                     </th>
 
                     <th
                         class="px-6 py-4 text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400"
                     >
                         Cashier
+                    </th>
+
+                    <th
+                        class="px-6 py-4 text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400"
+                    >
+                        Status
                     </th>
 
                     <th
@@ -90,20 +96,94 @@
                         </td>
 
                         {{-- Patient --}}
-                        <td class="px-6 py-4">
+                        <td class="px-6 py-4 whitespace-nowrap">
 
-                            <p class="font-medium text-zinc-900 dark:text-white">
-                                {{ $transaction->patient_name }}
-                            </p>
+                            <div class="space-y-1">
+
+                                <p class="font-medium text-zinc-900 dark:text-white">
+                                    {{ $transaction->patient_name }}
+                                </p>
+
+                                <div
+                                    class="flex items-center gap-2 text-xs text-zinc-500 dark:text-zinc-400"
+                                >
+
+                                    <span>
+                                        {{ \Carbon\Carbon::parse($transaction->patient_dob)->age }}
+                                        years
+                                    </span>
+
+                                    <span>•</span>
+
+                                    <span class="capitalize">
+                                        {{ $transaction->patient_gender }}
+                                    </span>
+
+                                </div>
+
+                            </div>
 
                         </td>
 
                         {{-- Cashier --}}
-                        <td class="px-6 py-4">
+                        <td class="px-6 py-4 whitespace-nowrap">
 
                             <p class="text-zinc-600 dark:text-zinc-300">
                                 {{ $transaction->cashier?->name ?? 'Unassigned' }}
                             </p>
+
+                        </td>
+
+                        {{-- Status --}}
+                        <td class="whitespace-nowrap px-6 py-4">
+
+                            @php
+
+                                $statusClasses = match($transaction->status?->value) {
+
+                                    'paid' => '
+                                        border-emerald-200
+                                        bg-emerald-50
+                                        text-emerald-700
+                                        dark:border-emerald-500/20
+                                        dark:bg-emerald-500/10
+                                        dark:text-emerald-400
+                                    ',
+
+                                    'cancelled' => '
+                                        border-red-200
+                                        bg-red-50
+                                        text-red-700
+                                        dark:border-red-500/20
+                                        dark:bg-red-500/10
+                                        dark:text-red-400
+                                    ',
+
+                                    default => '
+                                        border-amber-200
+                                        bg-amber-50
+                                        text-amber-700
+                                        dark:border-amber-500/20
+                                        dark:bg-amber-500/10
+                                        dark:text-amber-400
+                                    ',
+                                };
+
+                            @endphp
+
+                            <span
+                                class="
+                                    inline-flex items-center gap-2 rounded-full border
+                                    px-3 py-1 text-xs font-semibold
+                                    {{ $statusClasses }}
+                                "
+                            >
+
+                                <div class="size-2 rounded-full bg-current"></div>
+
+                                {{ ucfirst($transaction->status->value ?? 'draft') }}
+
+                            </span>
 
                         </td>
 
@@ -128,7 +208,7 @@
                     <tr>
 
                         <td
-                            colspan="5"
+                            colspan="6"
                             class="px-6 py-16 text-center"
                         >
 

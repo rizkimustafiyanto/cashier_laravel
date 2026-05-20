@@ -17,7 +17,7 @@
                         <p class="font-medium text-zinc-900 dark:text-white">{{ $procedure->procedure_name }}</p>
                         <p class="text-sm text-zinc-500 dark:text-zinc-400">Revenue Rp {{ number_format((float) $procedure->total_revenue, 0, ',', '.') }}</p>
                     </div>
-                    <span class="rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700 dark:bg-blue-500/10 dark:text-blue-400">
+                    <span class="rounded-full bg-blue-50 px-3 py-1 text-xs text-center font-semibold text-blue-700 dark:bg-blue-500/10 dark:text-blue-400">
                         {{ number_format((int) $procedure->total_used) }} uses
                     </span>
                 </div>

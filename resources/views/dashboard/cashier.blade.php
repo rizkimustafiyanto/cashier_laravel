@@ -74,13 +74,14 @@
 
                 {{-- Table --}}
                 <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-zinc-200 text-sm dark:divide-zinc-700">
+                    <table class="min-w-full table-auto divide-y divide-zinc-200 text-sm dark:divide-zinc-700">
                         {{-- Table Head --}}
                         <thead class="bg-zinc-50 dark:bg-zinc-800/50">
                             <tr class="text-left">
                                 <th class="px-6 py-4 text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">Invoice</th>
                                 <th class="px-6 py-4 text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">Patient</th>
                                 <th class="px-6 py-4 text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">Cashier</th>
+                                <th class="px-6 py-4 text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">Status</th>
                                 <th class="px-6 py-4 text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">Total</th>
                                 <th class="px-6 py-4 text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">Date</th>
                                 <th class="px-6 py-4 text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">Action</th>
@@ -96,12 +97,87 @@
                                             {{ $transaction->invoice_number }}
                                         </span>
                                     </td>
-                                    <td class="px-6 py-4">
-                                        <p class="font-medium text-zinc-900 dark:text-white">{{ $transaction->patient_name }}</p>
-                                        <p class="text-sm text-zinc-500 dark:text-zinc-400">{{ $transaction->patient_email }}</p>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+
+                                        <div class="space-y-1">
+
+                                            <p class="font-medium text-zinc-900 dark:text-white">
+                                                {{ $transaction->patient_name }}
+                                            </p>
+
+                                            <div
+                                                class="flex items-center gap-2 text-xs text-zinc-500 dark:text-zinc-400"
+                                            >
+
+                                                <span>
+                                                    {{ \Carbon\Carbon::parse($transaction->patient_dob)->age }}
+                                                    years
+                                                </span>
+
+                                                <span>•</span>
+
+                                                <span class="capitalize">
+                                                    {{ $transaction->patient_gender }}
+                                                </span>
+
+                                            </div>
+
+                                        </div>
+
                                     </td>
-                                    <td class="px-6 py-4">
+                                    <td class="px-6 py-4 whitespace-nowrap">
                                         <p class="text-zinc-600 dark:text-zinc-300">{{ $transaction->cashier?->name ?? 'Unassigned' }}</p>
+                                    </td>
+                                    <td class="whitespace-nowrap px-6 py-4">
+
+                                        @php
+
+                                            $statusClasses = match($transaction->status?->value) {
+
+                                                'paid' => '
+                                                    border-emerald-200
+                                                    bg-emerald-50
+                                                    text-emerald-700
+                                                    dark:border-emerald-500/20
+                                                    dark:bg-emerald-500/10
+                                                    dark:text-emerald-400
+                                                ',
+
+                                                'cancelled' => '
+                                                    border-red-200
+                                                    bg-red-50
+                                                    text-red-700
+                                                    dark:border-red-500/20
+                                                    dark:bg-red-500/10
+                                                    dark:text-red-400
+                                                ',
+
+                                                default => '
+                                                    border-amber-200
+                                                    bg-amber-50
+                                                    text-amber-700
+                                                    dark:border-amber-500/20
+                                                    dark:bg-amber-500/10
+                                                    dark:text-amber-400
+                                                ',
+                                            };
+
+                                        @endphp
+
+                                        <span
+                                            class="
+                                                inline-flex items-center gap-2 rounded-full border
+                                                px-3 py-1 text-xs font-semibold
+                                                {{ $statusClasses }}
+                                            "
+                                        >
+
+                                            <div class="size-2 rounded-full bg-current"></div>
+
+                                            {{ ucfirst($transaction->status->value ?? 'draft') }}
+
+                                        </span>
+
                                     </td>
                                     <td class="whitespace-nowrap px-6 py-4 text-sm font-bold text-zinc-900 dark:text-white">
                                         Rp {{ number_format((float) $transaction->grand_total, 0, ',', '.') }}
@@ -139,7 +215,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="6" class="px-6 py-16 text-center">
+                                    <td colspan="7" class="px-6 py-16 text-center">
                                         <div class="flex flex-col items-center justify-center">
                                             <div class="mb-4 rounded-2xl bg-zinc-100 p-4 dark:bg-zinc-800">
                                                 <flux:icon.clipboard-document class="size-8 text-zinc-400" />
