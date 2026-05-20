@@ -1,0 +1,98 @@
+@import 'tailwindcss';
+@import 'tom-select/dist/css/tom-select.css';
+@import '../../vendor/livewire/flux/dist/flux.css';
+
+@source '../views';
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../vendor/livewire/flux-pro/stubs/**/*.blade.php';
+@source '../../vendor/livewire/flux/stubs/**/*.blade.php';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+
+    --color-zinc-50: #fafafa;
+    --color-zinc-100: #f5f5f5;
+    --color-zinc-200: #e5e5e5;
+    --color-zinc-300: #d4d4d4;
+    --color-zinc-400: #a3a3a3;
+    --color-zinc-500: #737373;
+    --color-zinc-600: #525252;
+    --color-zinc-700: #404040;
+    --color-zinc-800: #262626;
+    --color-zinc-900: #171717;
+    --color-zinc-950: #0a0a0a;
+
+    --color-accent: var(--color-neutral-800);
+    --color-accent-content: var(--color-neutral-800);
+    --color-accent-foreground: var(--color-white);
+}
+
+@layer theme {
+    .dark {
+        --color-accent: var(--color-white);
+        --color-accent-content: var(--color-white);
+        --color-accent-foreground: var(--color-neutral-800);
+    }
+}
+
+@layer base {
+
+    *,
+    ::after,
+    ::before,
+    ::backdrop,
+    ::file-selector-button {
+        border-color: var(--color-gray-200, currentColor);
+    }
+}
+
+[data-flux-field]:not(ui-radio, ui-checkbox) {
+    @apply grid gap-2;
+}
+
+[data-flux-label] {
+    @apply  !mb-0 !leading-tight;
+}
+
+input:focus[data-flux-control],
+textarea:focus[data-flux-control],
+select:focus[data-flux-control] {
+    @apply outline-hidden ring-2 ring-accent ring-offset-2 ring-offset-accent-foreground;
+}
+
+/* \[:where(&)\]:size-4 {
+    @apply size-4;
+} */
+
+.ts-wrapper.single .ts-control,
+.ts-wrapper.multi .ts-control {
+    @apply min-h-12 rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 shadow-sm;
+}
+
+.ts-wrapper.single.input-active .ts-control,
+.ts-wrapper.multi.focus .ts-control {
+    @apply border-blue-500 ring-2 ring-blue-100;
+}
+
+.ts-wrapper .ts-control > input {
+    @apply text-sm text-gray-900 placeholder:text-gray-400;
+}
+
+.ts-control,
+.ts-dropdown {
+    @apply border-zinc-200 bg-white text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white;
+}
+
+.ts-control {
+    @apply rounded-2xl py-2.5;
+}
+
+.ts-dropdown .option {
+    @apply text-sm;
+}
+
+.ts-dropdown .active {
+    @apply bg-blue-50 text-blue-700 dark:bg-blue-500/20 dark:text-blue-300;
+}
