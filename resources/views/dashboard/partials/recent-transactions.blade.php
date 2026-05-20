@@ -118,7 +118,7 @@
                         <td
                             class="whitespace-nowrap px-6 py-4 text-sm text-zinc-500 dark:text-zinc-400"
                         >
-                            {{ $transaction->created_at?->format('d M Y, H:i') ?? '-' }}
+                            {{ $transaction->created_at?->timezone(auth()->user()?->timezone ?? config('app.timezone'))->format('d M Y, H:i') ?? '-' }}
                         </td>
 
                     </tr>

@@ -25,7 +25,7 @@
                 </p>
 
                 <p class="mt-2 text-sm font-semibold text-zinc-900 dark:text-white">
-                    {{ now()->format('d M Y') }}
+                    {{ now()->timezone(auth()->user()?->timezone ?? config('app.timezone'))->format('d M Y') }}
                 </p>
             </div>
 

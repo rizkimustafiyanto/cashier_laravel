@@ -145,14 +145,14 @@
                         <flux:text class="uppercase tracking-wide text-zinc-500">
                             {{ __('Created') }}
                         </flux:text>
-                        <flux:text>{{ $voucher->created_at->format('d M Y H:i') }}</flux:text>
+                        <flux:text>{{ $voucher->created_at->timezone(auth()->user()?->timezone ?? config('app.timezone'))->format('d M Y H:i') }}</flux:text>
                     </div>
 
                     <div class="border-t border-zinc-200 pt-3 dark:border-zinc-700">
                         <flux:text class="uppercase tracking-wide text-zinc-500">
                             {{ __('Last Updated') }}
                         </flux:text>
-                        <flux:text>{{ $voucher->updated_at->format('d M Y H:i') }}</flux:text>
+                        <flux:text>{{ $voucher->updated_at->timezone(auth()->user()?->timezone ?? config('app.timezone'))->format('d M Y H:i') }}</flux:text>
                     </div>
 
                     @if ($voucher->creator)

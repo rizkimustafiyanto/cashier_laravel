@@ -24,7 +24,7 @@ Route::get('/', function (GetDashboardSummaryAction $action) {
     return view('welcome', array_merge($data, [
         'activeVouchers' => $activeVouchers,
     ]));
-})->name('home');
+})->middleware('setTimezone')->name('home');
 
 /**
  * Dashboard routes
@@ -32,6 +32,7 @@ Route::get('/', function (GetDashboardSummaryAction $action) {
 
 Route::middleware([
     'auth',
+    'setTimezone',
     'role:marketing|cashier',
 ])->group(function () {
 
@@ -48,6 +49,7 @@ Route::middleware([
 
 Route::middleware([
     'auth',
+    'setTimezone',
     'role:cashier',
 ])->prefix('transactions')
     ->name('transactions.')
